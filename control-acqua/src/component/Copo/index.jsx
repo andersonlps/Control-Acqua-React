@@ -4,52 +4,48 @@ import './styles.css'
 
 const Copo = () => {
 
-    const [count, setCount] = useState(0)
-    const [ml, setMl] = useState(0)
+    const [count, setCount] = useState(1)
+    const [ml, setMl] = useState("")
     const [total, setTotal] = useState("")
-    const [totalMl, setTotalMl] = useState(0)
-    const [relatorio, setRelatorio] = useState("")
+    const [totalMl, setTotalMl] = useState("")
+    const [relatorio, setRelatorio] = useState([])
     const [meta, setMeta] = useState("")
-    const date = new Date().toLocaleString();
+    const [mensagem, setMensagem] = useState("")
 
     const Clique = () => {
-        
-        if (ml == 0) {
+
+        if ((ml == 0) || (meta == 0)) {
             alert("Preencha o ml do copo")
+        } else {
+
+            if (count * ml >= meta) {
+                setMensagem("PARABÉNS! META DIÁRIA BATIDA!")
+            }
+
+            setCount(prevState => prevState + 1)
+            setTotalMl(parseFloat(count) * parseFloat(ml))
+
+            let data = new Date().toLocaleString();
+            setRelatorio([...relatorio, data]);
         }
-
-        if (totalMl == meta) {
-
-            alert("PARABÉNS! META DIÁRIA BATIDA!!!")
-
-        }
-
-        setCount(count + 1)
-        setTotalMl(count * ml)
-        setRelatorio(prevState => prevState + "Último copo de água bebido às " + date)
-
     }
 
     const Reiniciar = () => {
-        setCount(0)
+        setCount(1)
         setMl("")
+        setTotalMl(0)
         setTotal("")
-        setTotalMl("")
-        setRelatorio("")
+        setRelatorio([])
         setMeta("")
+        setMensagem("")
     }
 
-    const Finalizar = () => {
-
-        setTotal('Total de copos bebidos ' + count + " ou " + (count * ml) + "ml de água")
-
-    }
 
     return (
         <div className='container'>
             <div className='box-login'>
                 <div className='titulo'>
-                    <h1>🥤Controle de Consume De Água diário🥤</h1>
+                    <h1>🥤Controle de Consumo De Água Diário🥤</h1>
                 </div>
                 <div className='form-dados'>
                     <div>
@@ -68,15 +64,17 @@ const Copo = () => {
                             onChange={e => setMeta(e.target.value)}
                         />
                         <h3>ML de água ingerido: {totalMl}</h3>
-                        <h3>Copos de aguá bebidos: {count}</h3>
+                        <h3>Copos de aguá bebidos: {(count - 1)}</h3>
+                        <h3>{mensagem}</h3>
                         <h3>{total}</h3>
-                        <h3>{relatorio}</h3>
                     </div>
                 </div>
                 <div className='box-footer'>
-                    <button onClick={Clique}>+🥤</button>
+                    <button id='countMl' onClick={Clique}>+🥤</button>
                     <button onClick={Reiniciar}>Reiniciar</button>
-                    <button onClick={Finalizar}>Finalizar</button>
+                </div>
+                <div className='relatorio'>
+                    {<ul className='lista'>{relatorio.map(relatorios => <li key={relatorios}>{relatorios}</li>)}</ul>}
                 </div>
             </div>
         </div>
