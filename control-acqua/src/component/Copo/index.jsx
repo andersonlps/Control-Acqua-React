@@ -11,22 +11,23 @@ const Copo = () => {
     const [relatorio, setRelatorio] = useState([])
     const [meta, setMeta] = useState("")
     const [mensagem, setMensagem] = useState("")
+    var input = document.getElementById('ml')
+    var data = new Date().toLocaleString();
 
     const Clique = () => {
 
         if ((ml == 0) || (meta == 0)) {
-            alert("Preencha o ml do copo")
+            alert("Preencha o ML")
         } else {
 
             if (count * ml >= meta) {
                 setMensagem("PARABÉNS! META DIÁRIA BATIDA!")
             }
 
+            input.disabled = true
             setCount(prevState => prevState + 1)
             setTotalMl(parseFloat(count) * parseFloat(ml))
-
-            let data = new Date().toLocaleString();
-            setRelatorio([...relatorio, data]);
+            setRelatorio([...relatorio, "Água bebida às :" + data]);
         }
     }
 
@@ -38,6 +39,7 @@ const Copo = () => {
         setRelatorio([])
         setMeta("")
         setMensagem("")
+        input.disabled = false
     }
 
 
@@ -51,6 +53,7 @@ const Copo = () => {
                     <div>
                         <h2>Quantos ml tem o copo?</h2>
                         <input
+                            id='ml'
                             placeholder='Digite aqui o ml'
                             type="number"
                             value={ml}
